@@ -33,3 +33,14 @@ Depois, acesse `http://localhost:8501`.
 Para evitar incompatibilidades de build no ambiente cloud, este projeto fixa o runtime em **Python 3.12.10** via `runtime.txt`.
 
 Se o deploy ficar “in the oven” por muito tempo, normalmente é por compilação de dependências em versão de Python sem wheel pronta.
+
+
+## 🧯 Troubleshooting (Streamlit Cloud)
+
+Se aparecer *"Your app is in the oven"* por muito tempo:
+
+1. Vá em **App settings → Advanced settings** e confirme `Python 3.12`.
+2. Clique em **Reboot app** e marque **Clear cache**.
+3. Confirme se o branch selecionado contém este `requirements.txt` sem versões antigas fixas.
+
+O erro de `pillow==10.4.0` + `Python 3.14` acontece quando o deploy usa dependências antigas sem wheel compatível.
