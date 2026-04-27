@@ -10,6 +10,7 @@ Aplicação em Streamlit para consolidar vários arquivos CSV com a mesma estrut
 - Consolidação em uma aba única de Excel
 - Coluna `arquivo_origem` para rastrear de qual arquivo cada linha veio
 - Reordenação opcional das colunas (informada pelo usuário)
+- Geração opcional da coluna `ifConcessora` no formato `codigo - descricao` (ex.: `01 - Nubank`)
 
 ## 🚀 Como executar
 

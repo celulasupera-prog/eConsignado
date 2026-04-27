@@ -63,6 +63,15 @@ with col2:
         help="Codificação de texto usada nos arquivos",
     )
 
+create_bank_column = st.checkbox(
+    "Criar coluna de banco no formato `codigo - descricao`",
+    value=True,
+    help=(
+        "Quando existirem as colunas `ifConcessora.codigo` e "
+        "`ifConcessora.descricao`, será criada a coluna `ifConcessora`."
+    ),
+)
+
 st.header("3️⃣ Ordem das Colunas (Opcional)")
 column_order_text = st.text_area(
     "Informe a ordem desejada das colunas (uma por linha)",
@@ -143,6 +152,42 @@ if uploaded_files:
 
                 status_text.text("Consolidando dados...")
                 df_consolidado = pd.concat(dataframes, ignore_index=True, sort=False)
+
+                if create_bank_column:
+                    bank_code_column = "ifConcessora.codigo"
+                    bank_description_column = "ifConcessora.descricao"
+
+                    if (
+                        bank_code_column in df_consolidado.columns
+                        and bank_description_column in df_consolidado.columns
+                    ):
+                        bank_code = (
+                            df_consolidado[bank_code_column]
+                            .astype("string")
+                            .fillna("")
+                            .str.strip()
+                            .str.replace(r"\\.0+$", "", regex=True)
+                        )
+                        bank_description = (
+                            df_consolidado[bank_description_column]
+                            .astype("string")
+                            .fillna("")
+                            .str.strip()
+                        )
+
+                        one_digit_mask = bank_code.str.fullmatch(r"\\d")
+                        bank_code = bank_code.where(~one_digit_mask, bank_code.str.zfill(2))
+
+                        combined_bank = (bank_code + " - " + bank_description).str.strip()
+                        combined_bank = combined_bank.str.replace(r"^\\s*-\\s*", "", regex=True)
+                        combined_bank = combined_bank.str.replace(r"\\s*-\\s*$", "", regex=True)
+                        df_consolidado["ifConcessora"] = combined_bank
+                    else:
+                        st.warning(
+                            "⚠️ Não foi possível criar `ifConcessora`: "
+                            "colunas `ifConcessora.codigo` e/ou "
+                            "`ifConcessora.descricao` não encontradas."
+                        )
 
                 if preferred_columns:
                     existing_preferred = [
