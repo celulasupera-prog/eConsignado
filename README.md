@@ -26,3 +26,10 @@ Depois, acesse `http://localhost:8501`.
 - Remoção de duplicatas
 - Validação de tipos de dados
 - Regras salvas para ordem de colunas
+
+
+## ☁️ Deploy (Streamlit Cloud)
+
+Para evitar incompatibilidades de build no ambiente cloud, este projeto fixa o runtime em **Python 3.12.10** via `runtime.txt`.
+
+Se o deploy ficar “in the oven” por muito tempo, normalmente é por compilação de dependências em versão de Python sem wheel pronta.
