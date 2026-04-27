@@ -12,6 +12,7 @@ Aplicação em Streamlit para consolidar vários arquivos CSV com a mesma estrut
 - Reordenação opcional das colunas (informada pelo usuário)
 - Geração opcional da coluna `ifConcessora` no formato `codigo - descricao` (ex.: `01 - Nubank`)
 - Ordem padrão do relatório com priorização automática das colunas principais
+- Limpeza automática de `inscricaoEmpregador.codigo` (coluna exportada em branco no consolidado)
 
 ## 🚀 Como executar
 

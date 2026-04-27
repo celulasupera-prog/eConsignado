@@ -189,6 +189,9 @@ if uploaded_files:
                 status_text.text("Consolidando dados...")
                 df_consolidado = pd.concat(dataframes, ignore_index=True, sort=False)
 
+                if "inscricaoEmpregador.codigo" in df_consolidado.columns:
+                    df_consolidado["inscricaoEmpregador.codigo"] = ""
+
                 if create_bank_column:
                     bank_code_column = "ifConcessora.codigo"
                     bank_description_column = "ifConcessora.descricao"
