@@ -9,7 +9,7 @@ from openpyxl.utils import get_column_letter
 
 
 st.set_page_config(
-    page_title="Consolidador de Planilhas CSV",
+    page_title="Consolidador de Empréstimos Consignados",
     page_icon="📊",
     layout="wide",
 )
@@ -231,7 +231,7 @@ st.markdown(
                         <circle cx="13" cy="13" r="1"></circle>
                         <circle cx="17" cy="8" r="1"></circle>
                     </svg>
-                    <span>Consolidador de Planilhas</span>
+                    <span>Consolidador de Empréstimos Consignados</span>
                     <span class="hero-highlight">CSV para Excel</span>
                 </h1>
                 <p class="fade-up delay-2">Envie ZIP ou múltiplos CSVs, consolide em segundos e exporte no layout do relatório.</p>
