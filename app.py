@@ -84,6 +84,42 @@ column_order_text = st.text_area(
 
 preferred_columns = [line.strip() for line in column_order_text.splitlines() if line.strip()]
 
+default_report_columns = [
+    "matricula",
+    "nomeTrabalhador",
+    "inscricaoEmpregador.codigo",
+    "nomeEmpregador",
+    "valorParcela",
+    "valorEmprestimo",
+    "totalParcelas",
+    "dataInicioContrato",
+    "dataFimContrato",
+    "competenciaInicioDesconto",
+    "ifConcessora",
+    "contrato",
+    "inscricaoEmpregador.descricao",
+    "numeroInscricaoEmpregador",
+    "cpf",
+    "competenciaFimDesconto",
+    "valorLiberado",
+    "qtdPagamentos",
+    "qtdEscrituracoes",
+    "categoriaTrabalhador.codigo",
+    "categoriaTrabalhador.descricao",
+    "competencia",
+    "inscricaoEstabelecimento.codigo",
+    "inscricaoEstabelecimento.descricao",
+    "numeroInscricaoEstabelecimento",
+    "dataAdmissao",
+    "arquivo_origem",
+]
+
+use_default_report_order = st.checkbox(
+    "Usar ordem padrão de colunas do relatório",
+    value=True,
+    help="Aplica automaticamente a ordem de colunas solicitada para o arquivo final.",
+)
+
 uploaded_files = None
 
 if upload_option == "Arquivo ZIP":
@@ -189,7 +225,27 @@ if uploaded_files:
                             "`ifConcessora.descricao` não encontradas."
                         )
 
-                if preferred_columns:
+                if use_default_report_order:
+                    existing_default_columns = [
+                        column for column in default_report_columns if column in df_consolidado.columns
+                    ]
+                    missing_default_columns = [
+                        column for column in default_report_columns if column not in df_consolidado.columns
+                    ]
+                    remaining_columns = [
+                        column
+                        for column in df_consolidado.columns
+                        if column not in existing_default_columns
+                    ]
+                    final_columns = existing_default_columns + remaining_columns
+                    df_consolidado = df_consolidado[final_columns]
+
+                    if missing_default_columns:
+                        st.warning(
+                            "⚠️ Algumas colunas da ordem padrão não foram encontradas: "
+                            + ", ".join(missing_default_columns)
+                        )
+                elif preferred_columns:
                     existing_preferred = [
                         column for column in preferred_columns if column in df_consolidado.columns
                     ]
