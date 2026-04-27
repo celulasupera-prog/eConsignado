@@ -15,6 +15,8 @@ Aplicação em Streamlit para consolidar vários arquivos CSV com a mesma estrut
 - Limpeza automática de `inscricaoEmpregador.codigo` (coluna exportada em branco no consolidado)
 - Opção para ocultar no Excel as colunas após `contrato` (mantendo visíveis as 12 primeiras)
 - Interface com tema visual escuro/neon inspirada no app de validação (sem alterar a lógica do processamento)
+- Exportação Excel com cabeçalho estilizado, congelamento da primeira linha, autofiltro e ajuste de largura das colunas
+- Filtro automático em `competenciaInicioDesconto` com base no valor encontrado em `competencia`
 
 ## 🚀 Como executar
 

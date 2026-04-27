@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pandas as pd
 import streamlit as st
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 
@@ -370,6 +371,61 @@ hide_columns_after_contract = st.checkbox(
 
 uploaded_files = None
 
+
+def _aplicar_estilo_planilha(worksheet):
+    header_fill = PatternFill(fill_type="solid", start_color="1F2937", end_color="1F2937")
+    header_font = Font(color="FFFFFF", bold=True)
+    thin_border = Border(
+        left=Side(style="thin", color="D1D5DB"),
+        right=Side(style="thin", color="D1D5DB"),
+        top=Side(style="thin", color="D1D5DB"),
+        bottom=Side(style="thin", color="D1D5DB"),
+    )
+
+    worksheet.freeze_panes = "A2"
+
+    for cell in worksheet[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+        cell.border = thin_border
+
+    for row in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row, min_col=1, max_col=worksheet.max_column):
+        for cell in row:
+            cell.border = thin_border
+            cell.alignment = Alignment(vertical="center")
+
+    for column_idx in range(1, worksheet.max_column + 1):
+        column_letter = get_column_letter(column_idx)
+        max_length = 0
+        for row_idx in range(1, worksheet.max_row + 1):
+            value = worksheet.cell(row=row_idx, column=column_idx).value
+            value_length = len(str(value)) if value is not None else 0
+            if value_length > max_length:
+                max_length = value_length
+        worksheet.column_dimensions[column_letter].width = min(max(max_length + 2, 12), 45)
+
+
+def _aplicar_filtros_planilha(worksheet, dataframe):
+    worksheet.auto_filter.ref = worksheet.dimensions
+
+    coluna_competencia = "competencia"
+    coluna_competencia_inicio = "competenciaInicioDesconto"
+
+    if (
+        coluna_competencia in dataframe.columns
+        and coluna_competencia_inicio in dataframe.columns
+    ):
+        valores_competencia = (
+            dataframe[coluna_competencia].dropna().astype(str).str.strip()
+        )
+        valores_competencia = valores_competencia[valores_competencia != ""]
+
+        if not valores_competencia.empty:
+            competencia_alvo = valores_competencia.iloc[0]
+            col_id = list(dataframe.columns).index(coluna_competencia_inicio)
+            worksheet.auto_filter.add_filter_column(col_id, [competencia_alvo])
+
 if upload_option == "Arquivo ZIP":
     uploaded_file = st.file_uploader(
         "Faça upload do arquivo ZIP contendo os CSVs:",
@@ -537,8 +593,10 @@ if uploaded_files:
                 output = io.BytesIO()
                 with pd.ExcelWriter(output, engine="openpyxl") as writer:
                     df_consolidado.to_excel(writer, index=False, sheet_name="Dados Consolidados")
+                    worksheet = writer.sheets["Dados Consolidados"]
+                    _aplicar_filtros_planilha(worksheet, df_consolidado)
+                    _aplicar_estilo_planilha(worksheet)
                     if hide_columns_after_contract:
-                        worksheet = writer.sheets["Dados Consolidados"]
                         first_hidden_column = 13
                         for column_idx in range(first_hidden_column, worksheet.max_column + 1):
                             column_letter = get_column_letter(column_idx)
