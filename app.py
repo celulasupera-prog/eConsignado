@@ -309,16 +309,8 @@ create_bank_column = st.checkbox(
 )
 
 st.header("3️⃣ Ordem das Colunas (Opcional)")
-column_order_text = st.text_area(
-    "Informe a ordem desejada das colunas (uma por linha)",
-    placeholder="Exemplo:\nCPF\nNOME\nVALOR\nDATA",
-    help=(
-        "As colunas informadas serão posicionadas primeiro e na ordem exata definida. "
-        "As demais colunas serão adicionadas automaticamente ao final."
-    ),
-)
-
-preferred_columns = [line.strip() for line in column_order_text.splitlines() if line.strip()]
+column_order_text = ""
+preferred_columns = []
 
 default_report_columns = [
     "matricula",
@@ -355,6 +347,17 @@ use_default_report_order = st.checkbox(
     value=True,
     help="Aplica automaticamente a ordem de colunas solicitada para o arquivo final.",
 )
+
+if not use_default_report_order:
+    column_order_text = st.text_area(
+        "Informe a ordem desejada das colunas (uma por linha)",
+        placeholder="Exemplo:\nCPF\nNOME\nVALOR\nDATA",
+        help=(
+            "As colunas informadas serão posicionadas primeiro e na ordem exata definida. "
+            "As demais colunas serão adicionadas automaticamente ao final."
+        ),
+    )
+    preferred_columns = [line.strip() for line in column_order_text.splitlines() if line.strip()]
 
 hide_columns_after_contract = st.checkbox(
     "Ocultar no Excel as colunas após `contrato`",
