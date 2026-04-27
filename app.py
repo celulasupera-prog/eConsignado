@@ -13,12 +13,97 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("📊 Consolidador de Planilhas CSV")
 st.markdown(
     """
-Consolide vários arquivos CSV (mesma estrutura) em uma única planilha Excel.
-Você pode enviar um `.zip` com vários CSVs ou selecionar múltiplos CSVs diretamente.
-"""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;700;800&display=swap');
+    :root {
+        --bg: #080808;
+        --panel: #111111;
+        --panel-2: #181818;
+        --border: rgba(255,255,255,0.08);
+        --border-hover: rgba(255,255,255,0.20);
+        --text: #f0f0f0;
+        --muted: #9b9b9b;
+        --cyan: #00e5ff;
+        --purple: #c77dff;
+        --lime: #c8ff5d;
+        --primary: #00e5ff;
+        --primary-hover: #29ebff;
+        --shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+    html, body, [class*="css"] { font-family: "DM Sans", sans-serif; }
+    .main {
+        background:
+            radial-gradient(circle at 16% 6%, rgba(0,229,255,0.10), transparent 26%),
+            radial-gradient(circle at 84% 85%, rgba(199,125,255,0.10), transparent 28%),
+            linear-gradient(180deg, #0a0a0a 0%, #080808 100%);
+        color: var(--text);
+    }
+    .app-hero {
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 1.2rem 1.35rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, rgba(17,17,17,0.95), rgba(24,24,24,0.94));
+        box-shadow: var(--shadow);
+    }
+    .app-badge {
+        display: inline-flex;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(200,255,93,0.5);
+        background: rgba(200,255,93,0.08);
+        color: #ddff92;
+        font-size: 12px;
+        font-family: "Syne", sans-serif;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+    .app-hero h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(1.7rem, 3.8vw, 2.8rem);
+        letter-spacing: -0.03em;
+        margin: 0 0 0.4rem 0;
+        color: var(--text);
+    }
+    .app-hero p { margin: 0; color: var(--muted); max-width: 70ch; }
+    .app-highlight {
+        background: linear-gradient(90deg, var(--cyan) 0%, #ff6ad5 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    div[data-testid="stMetric"] {
+        border: 1px solid var(--border);
+        background-color: rgba(255,255,255,0.03);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+    .stDataFrame { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .stDownloadButton button {
+        border-radius: 14px; font-weight: 700; background: var(--primary); color: #001318;
+        border: 1px solid var(--primary);
+    }
+    .stDownloadButton button:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+    .stButton button { border-radius: 14px; font-weight: 700; border: 1px solid var(--border); }
+    .stButton button:hover { border-color: var(--border-hover); }
+    .stSuccess, .stWarning, .stInfo { border-radius: 12px; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div class="app-hero">
+        <div class="app-badge">Consolidação inteligente</div>
+        <h1>📊 Consolidador de Planilhas <span class="app-highlight">CSV</span></h1>
+        <p>Consolide vários arquivos CSV com a mesma estrutura em uma única planilha Excel.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 with st.sidebar:
