@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pandas as pd
 import streamlit as st
+from openpyxl.utils import get_column_letter
 
 
 st.set_page_config(
@@ -118,6 +119,15 @@ use_default_report_order = st.checkbox(
     "Usar ordem padrão de colunas do relatório",
     value=True,
     help="Aplica automaticamente a ordem de colunas solicitada para o arquivo final.",
+)
+
+hide_columns_after_contract = st.checkbox(
+    "Ocultar no Excel as colunas após `contrato`",
+    value=True,
+    help=(
+        "Mantém visíveis apenas as 12 primeiras colunas do relatório "
+        "(de `matricula` até `contrato`)."
+    ),
 )
 
 uploaded_files = None
@@ -289,6 +299,12 @@ if uploaded_files:
                 output = io.BytesIO()
                 with pd.ExcelWriter(output, engine="openpyxl") as writer:
                     df_consolidado.to_excel(writer, index=False, sheet_name="Dados Consolidados")
+                    if hide_columns_after_contract:
+                        worksheet = writer.sheets["Dados Consolidados"]
+                        first_hidden_column = 13
+                        for column_idx in range(first_hidden_column, worksheet.max_column + 1):
+                            column_letter = get_column_letter(column_idx)
+                            worksheet.column_dimensions[column_letter].hidden = True
 
                 output_filename = f"consolidado_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
                 st.download_button(
